@@ -8,7 +8,27 @@ class SomeAlgorithm extends IAlgorithm {
 
   @override
   (int?, GameStatus) checkStatus(List<MarkedPoint> givenPositions) {
-    throw UnimplementedError();
+    // Check rows and columns for a win
+    for (int i = 0; i < 3; i++) {
+      if (_checkLine(givenPositions, Point(i, 0), Point(i, 1), Point(i, 2)) ||
+          _checkLine(givenPositions, Point(0, i), Point(1, i), Point(2, i))) {
+        return (givenPositions.last.value, GameStatus.won);
+      }
+    }
+
+    // Check diagonals for a win
+    if (_checkLine(givenPositions, const Point(0, 0), const Point(1, 1), const Point(2, 2)) ||
+        _checkLine(givenPositions, const Point(0, 2), const Point(1, 1), const Point(2, 0))) {
+      return (givenPositions.last.value, GameStatus.won);
+    }
+
+    // Check for a draw
+    if (givenPositions.length == EngineConstants.maxPositions) {
+      return (null, GameStatus.draw);
+    }
+
+    // Game is still in progress
+    return (null, GameStatus.inProgress);
   }
 
   /// Checks if three points form a winning line

@@ -4,6 +4,7 @@ import 'package:munch_test/engine/engine.dart';
 import 'package:munch_test/engine/src/constants.dart';
 
 class SomeAlgorithm extends IAlgorithm {
+  final Random _random = Random();
   SomeAlgorithm() : super(EngineConstants.computerMarker);
 
   @override
@@ -17,34 +18,44 @@ class SomeAlgorithm extends IAlgorithm {
     return givenPositions;
   }
 
+  /// Determines the next move for the computer player with reduced difficulty
   MarkedPoint _determineNextComputerMove(List<MarkedPoint> givenPositions) {
-    // Try to win
-    MarkedPoint? winningMove = _findWinningMove(givenPositions, EngineConstants.computerMarker);
-    if (winningMove != null) return winningMove;
+    // Try to win (but only 75% of the time)
+    if (_random.nextDouble() < 0.75) {
+      MarkedPoint? winningMove = _findWinningMove(givenPositions, EngineConstants.computerMarker);
+      if (winningMove != null) return winningMove;
+    }
 
-    // Block opponent's winning move
-    MarkedPoint? blockingMove = _findWinningMove(givenPositions, EngineConstants.playerMarker);
-    if (blockingMove != null) return blockingMove;
-    
-    // Take center if available
-    if (_isPositionEmpty(givenPositions, const Point(1, 1))) {
-      return MarkedPoint(value: EngineConstants.computerMarker, position: const Point(1, 1));
+    // Block opponent's winning move (but only 50% of the time)
+    if (_random.nextDouble() < 0.5) {
+      MarkedPoint? blockingMove = _findWinningMove(givenPositions, EngineConstants.playerMarker);
+      if (blockingMove != null) return blockingMove;
     }
     
-    // Take a corner if available
-    List<Point> corners = const [Point(0, 0), Point(0, 2), Point(2, 0), Point(2, 2)];
-    for (var corner in corners) {
-      if (_isPositionEmpty(givenPositions, corner)) {
-        return MarkedPoint(value: EngineConstants.computerMarker, position: corner);
+    // Take center or corner (50% of the time when no winning/blocking move)
+    if (_random.nextDouble() < 0.5) {
+      if (_isPositionEmpty(givenPositions, const Point(1, 1))) {
+        return MarkedPoint(value: EngineConstants.computerMarker, position: const Point(1, 1));
+      }
+
+      // Take a corner if available
+      List<Point> corners = const [Point(0, 0), Point(0, 2), Point(2, 0), Point(2, 2)];
+      for (var corner in corners) {
+        if (_isPositionEmpty(givenPositions, corner)) {
+          return MarkedPoint(value: EngineConstants.computerMarker, position: corner);
+        }
       }
     }
-    
-    // Take any available position
+
+    // If no strategic move was made, make a random move
+    return _makeRandomMove(givenPositions);
+  }
+
+  /// Makes a random move
+  MarkedPoint _makeRandomMove(List<MarkedPoint> givenPositions) {
     List<Point> emptyPositions = _unoccupiedPositions(givenPositions);
-    return MarkedPoint(
-        value: EngineConstants.computerMarker,
-        position: emptyPositions[Random().nextInt(emptyPositions.length)]
-    );
+    Point randomPosition = emptyPositions[_random.nextInt(emptyPositions.length)];
+    return MarkedPoint(value: EngineConstants.computerMarker, position: randomPosition);
   }
 
   /// Finds a winning move for the given player marker

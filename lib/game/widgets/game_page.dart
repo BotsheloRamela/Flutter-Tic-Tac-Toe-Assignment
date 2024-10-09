@@ -45,10 +45,11 @@ class GamePage extends StatelessWidget {
                     child: ActionButton(status: state.status),
                   ),
                   const SizedBox(height: 20),
-                  if (state.status == Status.inProgress)
+                  if (state.canResetScoreSheet)
                     SizedBox(
                       height: MediaQuery.sizeOf(context).height * .07,
-                      child: ActionButton(status: state.status),
+                      child: ActionButton(status: state.status,
+                          isResetScoreSheetButton: true),
                     ),
                 ],
               ),

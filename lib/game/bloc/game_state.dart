@@ -1,6 +1,7 @@
 part of 'game_bloc.dart';
 
 enum Status { init, inProgress, won, draw }
+// enum ScoreSheetStatus { initial, changed }
 
 extension on GameStatus {
   Status toBlocStatus() {
@@ -53,6 +54,11 @@ class GameState extends Equatable {
   @override
   List<Object?> get props => [positions, winner, status];
 
+  // returns true if any of the players has a score greater than 0
+  bool get canResetScoreSheet {
+    return scoreSheet.values.any((score) => score > 0);
+  }
+
   GameState copyWith({
     List<MarkedPoint>? positions,
     Map<int, int>? scoreSheet,
@@ -73,4 +79,5 @@ class GameState extends Equatable {
 
   int? get getComputerScore => scoreSheet[EngineConstants.computerMarker];
   int? get getPlayerScore => scoreSheet[EngineConstants.playerMarker];
+
 }

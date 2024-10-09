@@ -21,6 +21,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<MoveEvent>(_handleMoveEvent);
     on<PromptComputerMoveEvent>(_handlePromptComputerMoveEvent);
     on<ResetEvent>(_handleResetEvent);
+    on<ResetScoreSheetEvent>(_handleResetScoreSheetEvent);
   }
 
   void _handleMoveEvent(MoveEvent event, Emitter<GameState> emit) {
@@ -102,6 +103,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       status: status.toBlocStatus(),
       winner: winner,
     ));
+  }
+
+  void _handleResetScoreSheetEvent(ResetScoreSheetEvent event, Emitter<GameState> emit) async {
+    emit(state.copyWith());
   }
 }
 

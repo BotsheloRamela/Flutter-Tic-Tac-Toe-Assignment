@@ -16,6 +16,7 @@ class GamePage extends StatelessWidget {
           if (state.status == Status.won || state.status == Status.draw) {
             showModalBottomSheet(
               context: context,
+              backgroundColor: Colors.transparent,
               builder: (_) => BlocProvider.value(
                 value: context.read<GameBloc>(),
                 child: const GameStatusSheet(),

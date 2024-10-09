@@ -28,6 +28,11 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.read<GameBloc>();
+
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
+
     return FilledButton(
       onPressed: () {
         switch (status) {
@@ -41,12 +46,21 @@ class ActionButton extends StatelessWidget {
           default:
         }
       },
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all(colorScheme.inversePrimary),
+        padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
+        shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(status.icon),
+          Icon(status.icon, size: 32),
           const SizedBox(width: 8),
-          Text(status.label),
+          Text(
+            status.label,
+            style: textTheme.bodyMedium?.copyWith(color: colorScheme.surfaceContainerLowest),
+          ),
         ],
       ),
     );

@@ -8,7 +8,7 @@ extension on Status {
       return 'Start Game';
     }
     if (this == Status.inProgress) {
-      return 'Reset Game';
+      return 'Restart Game';
     }
     return 'Play Again';
   }
@@ -48,7 +48,7 @@ class ActionButton extends StatelessWidget {
       },
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all(colorScheme.inversePrimary),
-        padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
+        padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 16)),
         shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
       ),
       child: Row(

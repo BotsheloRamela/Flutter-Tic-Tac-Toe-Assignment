@@ -18,8 +18,9 @@ class _MarkerBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.read<GameBloc>();
-    ThemeData theme = Theme.of(context);
-    Color? pointColor = point?.value.toColor(theme);
+    final ThemeData theme = Theme.of(context);
+    final Color? pointColor = point?.value.toColor(theme);
+
     return GestureDetector(
       onTap: () => gameBloc.add(MoveEvent(MarkedPoint.pointByPlayer(position: position))),
       child: Container(
@@ -37,42 +38,37 @@ class _MarkerBlock extends StatelessWidget {
   }
 }
 
-class Grid extends StatefulWidget {
-  List<MarkedPoint> positions;
-  Grid({required this.positions, super.key});
+class Grid extends StatelessWidget {
+  final List<MarkedPoint> positions;
 
-  @override
-  State<Grid> createState() => _GridState();
-}
+  const Grid({required this.positions, super.key});
 
-class _GridState extends State<Grid> {
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
-        List<MarkedPoint> gridPositions = state.positions;
-        return SizedBox(
-          child: Container(
-            decoration: BoxDecoration(
-              color: theme.colorScheme.onSurface,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: GridView.count(
-              padding: EdgeInsets.all(10),
+        final List<MarkedPoint> gridPositions = state.positions;
+
+        return Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.onSurface,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: GridView.builder(
+            padding: const EdgeInsets.all(10),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
-              children: EngineConstants.maxGridPoints.map(
-                (position) {
-                  MarkedPoint? currentPoint = gridPositions.existsOnGrid(position);
-                  return _MarkerBlock(
-                    point: currentPoint,
-                    position: position,
-                  );
-                },
-              ).toList(),
             ),
+            itemCount: EngineConstants.maxGridPoints.length,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              final position = EngineConstants.maxGridPoints[index];
+              final currentPoint = gridPositions.existsOnGrid(position);
+              return _MarkerBlock(point: currentPoint, position: position);
+            },
           ),
         );
       },

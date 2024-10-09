@@ -8,7 +8,7 @@ extension on Status {
       return 'Start Game';
     }
     if (this == Status.inProgress) {
-      return 'Reset Game';
+      return 'Restart Game';
     }
     return 'Play Again';
   }
@@ -23,11 +23,44 @@ extension on Status {
 
 class ActionButton extends StatelessWidget {
   final Status status;
-  const ActionButton({required this.status, super.key});
+  final bool? isResetScoreSheetButton;
+  const ActionButton({
+    required this.status,
+    this.isResetScoreSheetButton = false,
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.read<GameBloc>();
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
+
+    if (isResetScoreSheetButton == true) {
+      return FilledButton(
+        onPressed: () => gameBloc.add(ResetScoreSheetEvent()),
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all(colorScheme.surface),
+          padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 16)),
+          shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+          side: WidgetStateProperty.all(BorderSide(color: colorScheme.inversePrimary)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.refresh, size: 32, color: colorScheme.inversePrimary),
+            const SizedBox(width: 8),
+            Text(
+              'Reset Score',
+              style: textTheme.bodyMedium?.copyWith(color: colorScheme.inversePrimary),
+            ),
+          ],
+        ),
+      );
+    }
+
     return FilledButton(
       onPressed: () {
         switch (status) {
@@ -41,12 +74,21 @@ class ActionButton extends StatelessWidget {
           default:
         }
       },
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all(colorScheme.inversePrimary),
+        padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 16)),
+        shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(status.icon),
+          Icon(status.icon, size: 32),
           const SizedBox(width: 8),
-          Text(status.label),
+          Text(
+            status.label,
+            style: textTheme.bodyMedium?.copyWith(color: colorScheme.surfaceContainerLowest),
+          ),
         ],
       ),
     );

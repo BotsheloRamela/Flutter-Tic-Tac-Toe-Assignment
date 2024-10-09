@@ -17,3 +17,6 @@ class PromptComputerMoveEvent extends GameEvent {}
 
 @immutable
 class ResetEvent extends GameEvent {}
+
+@immutable
+class ResetScoreSheetEvent extends GameEvent {}

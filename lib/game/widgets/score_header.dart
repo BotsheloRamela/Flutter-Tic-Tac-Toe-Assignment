@@ -29,7 +29,7 @@ class ScoreHeader extends StatelessWidget {
           ),
         ),
         Flexible(
-          flex: 2,
+          flex: 3,
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -47,11 +47,10 @@ class ScoreHeader extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Flexible(
-          flex: 3,
+          flex: 4,
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(

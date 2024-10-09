@@ -21,6 +21,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<MoveEvent>(_handleMoveEvent);
     on<PromptComputerMoveEvent>(_handlePromptComputerMoveEvent);
     on<ResetEvent>(_handleResetEvent);
+    on<ResetScoreSheetEvent>(_handleResetScoreSheetEvent);
   }
 
   void _handleMoveEvent(MoveEvent event, Emitter<GameState> emit) {
@@ -82,6 +83,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       winner: winner,
       scoreSheet: scoreSheet,
     ));
+
     return;
   }
 
@@ -101,6 +103,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       positions: outputPositions,
       status: status.toBlocStatus(),
       winner: winner,
+    ));
+  }
+
+  void _handleResetScoreSheetEvent(ResetScoreSheetEvent event, Emitter<GameState> emit) {
+    emit(state.copyWith(
+      positions: state.positions,
+      status: Status.init,
+      scoreSheet: {EngineConstants.playerMarker: 0, EngineConstants.computerMarker: 0},
+      gamesCounter: state.gamesCounter,
+      winner: null,
+      canResetScoreSheet: true,
     ));
   }
 }

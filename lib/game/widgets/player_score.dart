@@ -17,6 +17,8 @@ class PlayerScore extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Flexible(
             child: Text(
@@ -26,6 +28,7 @@ class PlayerScore extends StatelessWidget {
           ),
           Flexible(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(playerLabel),
                 Text(

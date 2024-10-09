@@ -15,14 +15,27 @@ class GamePage extends StatelessWidget {
         listenWhen: (previous, current) =>
           current.status == Status.won || current.status == Status.draw,
         listener: (context, state) {
-          showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            builder: (_) => BlocProvider.value(
-              value: context.read<GameBloc>(),
-              child: const GameStatusSheet(),
-            ),
-          );
+          // get orientation
+          final orientation = MediaQuery.of(context).orientation;
+
+          if (orientation == Orientation.portrait) {
+            showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (_) => BlocProvider.value(
+                value: context.read<GameBloc>(),
+                child: const GameStatusSheet(),
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (_) => BlocProvider.value(
+                value: context.read<GameBloc>(),
+                child: const GameStatusSheet(isPortrait: false),
+              ),
+            );
+          }
         },
         child: BlocBuilder<GameBloc, GameState>(
           buildWhen: (previous, current) =>

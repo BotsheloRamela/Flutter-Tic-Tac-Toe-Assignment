@@ -18,7 +18,11 @@ extension on Status {
 }
 
 class GameStatusSheet extends StatelessWidget {
-  const GameStatusSheet({super.key});
+  final bool isPortrait;
+  const GameStatusSheet({
+    this.isPortrait = true,
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +39,10 @@ class GameStatusSheet extends StatelessWidget {
           return const SizedBox.shrink();
         }
         return ClipRRect(
-          borderRadius: const BorderRadius.only(
+          borderRadius: isPortrait ? const BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
-          ),
+          ) : BorderRadius.zero,
           child: Container(
               height: MediaQuery.sizeOf(context).height * .4,
               padding: const EdgeInsets.all(32),

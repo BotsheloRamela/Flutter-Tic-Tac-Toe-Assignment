@@ -32,7 +32,7 @@ class PlayerScore extends StatelessWidget {
               children: [
                 Text(playerLabel),
                 Text(
-                  score.toString(),
+                  score > 0 ? '$score' : '-',
                   style: theme.textTheme.labelMedium,
                 ),
               ],

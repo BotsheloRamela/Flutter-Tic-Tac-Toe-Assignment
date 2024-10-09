@@ -23,12 +23,14 @@ class GameState extends Equatable {
   final int gamesCounter;
   final int? winner;
   final Status status;
+  final bool canResetScoreSheet;
   const GameState({
     required this.positions,
     required this.winner,
     required this.status,
     required this.scoreSheet,
     required this.gamesCounter,
+    this.canResetScoreSheet = false
   });
 
   factory GameState.init() => const GameState(
@@ -52,10 +54,10 @@ class GameState extends Equatable {
       );
 
   @override
-  List<Object?> get props => [positions, winner, status];
+  List<Object?> get props => [positions, winner, status, canResetScoreSheet];
 
   // returns true if any of the players has a score greater than 0
-  bool get canResetScoreSheet {
+  bool get showScoreResetBtn {
     return scoreSheet.values.any((score) => score > 0);
   }
 
@@ -64,6 +66,7 @@ class GameState extends Equatable {
     Map<int, int>? scoreSheet,
     int? winner,
     Status? status,
+    bool? canResetScoreSheet,
     int? gamesCounter,
   }) {
     return GameState(
@@ -72,6 +75,7 @@ class GameState extends Equatable {
       scoreSheet: scoreSheet ?? this.scoreSheet,
       gamesCounter: gamesCounter ?? this.gamesCounter,
       status: status ?? this.status,
+      canResetScoreSheet: canResetScoreSheet ?? this.canResetScoreSheet,
     );
   }
 

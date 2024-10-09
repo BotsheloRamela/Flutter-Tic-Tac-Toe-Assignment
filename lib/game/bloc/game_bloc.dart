@@ -83,6 +83,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       winner: winner,
       scoreSheet: scoreSheet,
     ));
+
     return;
   }
 
@@ -105,8 +106,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     ));
   }
 
-  void _handleResetScoreSheetEvent(ResetScoreSheetEvent event, Emitter<GameState> emit) async {
-    emit(state.copyWith());
+  void _handleResetScoreSheetEvent(ResetScoreSheetEvent event, Emitter<GameState> emit) {
+    emit(state.copyWith(
+      positions: state.positions,
+      status: Status.init,
+      scoreSheet: {EngineConstants.playerMarker: 0, EngineConstants.computerMarker: 0},
+      gamesCounter: state.gamesCounter,
+      winner: null,
+      canResetScoreSheet: true,
+    ));
   }
 }
 
